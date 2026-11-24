@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOTANICA HAIR - แชมพูสมุนไพรและเคราตินเข้มข้น</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Prompt', sans-serif; scroll-behavior: smooth; }
+  </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+  <!-- Config Alert Banner (Shows only when SCRIPT_URL is not set yet) -->
+  <div id="setup-banner" class="hidden bg-amber-100 border-b border-amber-300 text-amber-900 px-4 py-3 text-sm">
+    <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+      <div>
+        <strong>⚙️ โหมดตั้งค่าสำหรับเจ้าของร้าน:</strong> ยังไม่ได้ใส่ลิงก์ Google Apps Script (สามารถวางลิงก์ทดสอบได้ทันทีหรือแก้ในไฟล์ <code>index.html</code>)
+      </div>
+      <div class="flex gap-2 w-full md:w-auto">
+        <input type="text" id="quick-url-input" placeholder="วาง Web App URL ที่นี่..." class="px-3 py-1.5 rounded border border-amber-400 text-xs w-full md:w-64 bg-white">
+        <button onclick="saveQuickUrl()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-bold whitespace-nowrap">บันทึก URL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-stone-200">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <span class="text-2xl">🌿</span>
+        <span class="font-bold text-xl text-emerald-900 tracking-tight">BOTANICA HAIR</span>
+      </div>
+      <a href="#order-section" class="bg-emerald-700 hover:bg-emerald-800 text-white text-sm font-semibold px-5 py-2 rounded-full transition shadow-sm">
+        สั่งซื้อเลย
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-900 text-white py-16 md:py-24 px-4 text-center relative overflow-hidden">
+    <div class="max-w-3xl mx-auto relative z-10">
+      <span class="inline-block bg-emerald-800/80 border border-emerald-600 text-emerald-200 text-xs font-semibold px-4 py-1.5 rounded-full uppercase tracking-wider mb-4">
+        100% Organic & Dermatologist Tested
+      </span>
+      <h1 class="text-3xl md:text-5xl font-bold leading-tight mb-5">
+        หยุดผมร่วง บูสต์ผมหนา<br class="hidden md:inline"> ฟื้นฟูผมเสียล้ำลึกถึงแกนผม
+      </h1>
+      <p class="text-emerald-100/90 text-base md:text-lg mb-8 max-w-2xl mx-auto font-light">
+        นวัตกรรมแชมพูสารสกัดธรรมชาติเข้มข้น 2 สูตรเฉพาะ ปราศจากซิลิโคน พาราเบน และ SLS อ่อนโยนต่อหนังศีรษะ เห็นความเปลี่ยนแปลงตั้งแต่ขวดแรก
+      </p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#products" class="bg-amber-400 hover:bg-amber-500 text-stone-950 font-bold py-3.5 px-8 rounded-full shadow-lg transition transform hover:-translate-y-0.5">
+          เลือกสูตรแชมพู (2 สูตร)
+        </a>
+        <a href="#order-section" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white font-semibold py-3.5 px-8 rounded-full transition">
+          โปรโมชั่นส่งฟรีทั่วไทย
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Trust Badges -->
+  <section class="bg-white border-b border-stone-200 py-6 px-4">
+    <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 text-center text-xs md:text-sm font-medium text-stone-700">
+      <div class="flex items-center justify-center gap-2"><span class="text-lg">🌱</span> สารสกัดออร์แกนิกแท้</div>
+      <div class="flex items-center justify-center gap-2"><span class="text-lg">🚫</span> ไร้สารซิลิโคนและพาราเบน</div>
+      <div class="flex items-center justify-center gap-2"><span class="text-lg">🚚</span> จัดส่งด่วนฟรี ไม่มีขั้นต่ำ</div>
+      <div class="flex items-center justify-center gap-2"><span class="text-lg">💵</span> มีบริการเก็บเงินปลายทาง</div>
+    </div>
+  </section>
+
+  <!-- Product SKUs Section -->
+  <section id="products" class="max-w-5xl mx-auto py-16 px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-2xl md:text-3xl font-bold text-stone-900 mb-2">เลือกสูตรที่ตรงกับปัญหาเส้นผมของคุณ</h2>
+      <p class="text-stone-500">สามารถเลือกสั่งคละสูตรได้ตามต้องการ</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      
+      <!-- SKU 1 -->
+      <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition overflow-hidden border border-stone-200 flex flex-col">
+        <div class="bg-gradient-to-b from-emerald-50 to-emerald-100/60 h-64 flex flex-col items-center justify-center p-6 relative">
+          <span class="absolute top-4 left-4 bg-emerald-700 text-white text-xs font-bold px-3 py-1 rounded-full">ขายดีอันดับ 1</span>
+          <!-- Vector Bottle Illustration SKU 1 -->
+          <svg class="w-28 h-36 drop-shadow-md" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="48" y="10" width="24" height="14" rx="3" fill="#064E3B"/>
+            <path d="M40 24H80L86 38H34L40 24Z" fill="#047857"/>
+            <rect x="30" y="38" width="60" height="110" rx="14" fill="#059669"/>
+            <rect x="38" y="58" width="44" height="68" rx="6" fill="#ECFDF5"/>
+            <circle cx="60" cy="82" r="10" fill="#10B981"/>
+            <rect x="44" y="98" width="32" height="5" rx="2.5" fill="#065F46"/>
+            <rect x="48" y="107" width="24" height="4" rx="2" fill="#34D399"/>
+          </svg>
+          <span class="mt-2 text-xs font-semibold text-emerald-800">Herbal Anti-Hair Loss (300 ml)</span>
+        </div>
+
+        <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-md">รหัสสินค้า: SKU-01</span>
+              <div class="text-right">
+                <span class="text-xs text-stone-400 line-through mr-1">฿390</span>
+                <span class="text-2xl font-bold text-emerald-800">฿290</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-2">สูตรสมุนไพรลดผมร่วง & เร่งผมเกิดใหม่</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-4">
+              ผสานคุณค่าขิงแก่ มะกรูด อัญชัน และโสมเกาหลี ช่วยลดการหลุดร่วงของเส้นผม ควบคุมความมัน ลดอาการคันและรังแคบนหนังศีรษะ
+            </p>
+            <ul class="text-xs text-stone-600 space-y-1.5 mb-6">
+              <li>✅ รากผมแข็งแรงขึ้น ลดผมร่วงใน 2 สัปดาห์</li>
+              <li>✅ กระตุ้นการเกิดใหม่ของลูกผม</li>
+            </ul>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-stone-100">
+            <span class="font-semibold text-stone-700">เลือกจำนวน (ขวด):</span>
+            <div class="flex items-center space-x-3 bg-stone-100 p-1 rounded-full">
+              <button type="button" onclick="updateQty('sku1', -1)" class="w-9 h-9 rounded-full bg-white shadow-sm font-bold text-stone-700 hover:bg-stone-200 transition">-</button>
+              <span id="sku1-display" class="font-bold text-lg w-7 text-center">1</span>
+              <button type="button" onclick="updateQty('sku1', 1)" class="w-9 h-9 rounded-full bg-emerald-700 text-white shadow-sm font-bold hover:bg-emerald-800 transition">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKU 2 -->
+      <div class="bg-white rounded-3xl shadow-md hover:shadow-xl transition overflow-hidden border border-stone-200 flex flex-col">
+        <div class="bg-gradient-to-b from-amber-50 to-amber-100/60 h-64 flex flex-col items-center justify-center p-6 relative">
+          <span class="absolute top-4 left-4 bg-amber-600 text-white text-xs font-bold px-3 py-1 rounded-full">สูตรฟื้นฟูเร่งด่วน</span>
+          <!-- Vector Bottle Illustration SKU 2 -->
+          <svg class="w-28 h-36 drop-shadow-md" viewBox="0 0 120 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="48" y="10" width="24" height="14" rx="3" fill="#78350F"/>
+            <path d="M40 24H80L86 38H34L40 24Z" fill="#B45309"/>
+            <rect x="30" y="38" width="60" height="110" rx="14" fill="#D97706"/>
+            <rect x="38" y="58" width="44" height="68" rx="6" fill="#FFFBEB"/>
+            <circle cx="60" cy="82" r="10" fill="#F59E0B"/>
+            <rect x="44" y="98" width="32" height="5" rx="2.5" fill="#92400E"/>
+            <rect x="48" y="107" width="24" height="4" rx="2" fill="#FBBF24"/>
+          </svg>
+          <span class="mt-2 text-xs font-semibold text-amber-900">Intensive Keratin Repair (300 ml)</span>
+        </div>
+
+        <div class="p-6 md:p-8 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex justify-between items-center mb-3">
+              <span class="text-xs font-bold text-amber-800 bg-amber-100 px-2.5 py-1 rounded-md">รหัสสินค้า: SKU-02</span>
+              <div class="text-right">
+                <span class="text-xs text-stone-400 line-through mr-1">฿450</span>
+                <span class="text-2xl font-bold text-emerald-800">฿350</span>
+              </div>
+            </div>
+            <h3 class="text-xl font-bold text-stone-900 mb-2">สูตรเคราตินสด & อาร์แกนออยล์ ฟื้นฟูผมเสีย</h3>
+            <p class="text-stone-600 text-sm leading-relaxed mb-4">
+              บำรุงล้ำลึกสำหรับผมแห้งเสีย ชี้ฟู แตกปลาย จากการทำสี ยืด ดัด และความร้อน เติมเคราตินให้เส้นผมกลับมานุ่มลื่นมีน้ำหนัก เงางาม
+            </p>
+            <ul class="text-xs text-stone-600 space-y-1.5 mb-6">
+              <li>✅ ผมนุ่มลื่น ไม่พันกัน ตั้งแต่ครั้งแรกที่ใช้</li>
+              <li>✅ ล็อกสีผมให้สวยทนนาน ปกป้องผมจากความร้อน</li>
+            </ul>
+          </div>
+
+          <div class="flex items-center justify-between pt-4 border-t border-stone-100">
+            <span class="font-semibold text-stone-700">เลือกจำนวน (ขวด):</span>
+            <div class="flex items-center space-x-3 bg-stone-100 p-1 rounded-full">
+              <button type="button" onclick="updateQty('sku2', -1)" class="w-9 h-9 rounded-full bg-white shadow-sm font-bold text-stone-700 hover:bg-stone-200 transition">-</button>
+              <span id="sku2-display" class="font-bold text-lg w-7 text-center">0</span>
+              <button type="button" onclick="updateQty('sku2', 1)" class="w-9 h-9 rounded-full bg-emerald-700 text-white shadow-sm font-bold hover:bg-emerald-800 transition">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Order Form Section -->
+  <section id="order-section" class="max-w-2xl mx-auto pb-20 px-4">
+    <div class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border border-stone-200">
+      <div class="text-center mb-8">
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">ขั้นตอนสุดท้าย</span>
+        <h2 class="text-2xl md:text-3xl font-bold mt-2 text-stone-900">สรุปรายการและกรอกที่อยู่จัดส่ง</h2>
+      </div>
+      
+      <!-- Summary Box -->
+      <div class="bg-stone-100 p-5 rounded-2xl mb-6 space-y-2.5 text-sm border border-stone-200">
+        <div class="flex justify-between items-center">
+          <span class="text-stone-700">1. สูตรสมุนไพรลดผมร่วง (฿290):</span>
+          <span id="summary-sku1" class="font-bold text-stone-900">1 ขวด (฿290)</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-stone-700">2. สูตรเคราตินฟื้นฟูผมเสีย (฿350):</span>
+          <span id="summary-sku2" class="font-bold text-stone-900">0 ขวด (฿0)</span>
+        </div>
+        <div class="flex justify-between items-center text-emerald-700 pt-1">
+          <span>ค่าจัดส่งด่วน (Flash / Kerry):</span>
+          <span class="font-bold">ฟรี (฿0)</span>
+        </div>
+        <div class="flex justify-between items-center text-xl font-bold border-t border-stone-300 pt-3 text-stone-900">
+          <span>ยอดชำระสุทธิ:</span>
+          <span id="total-price" class="text-emerald-800">฿290</span>
+        </div>
+      </div>
+
+      <form id="order-form" class="space-y-4">
+        <div>
+          <label class="block text-sm font-semibold mb-1.5 text-stone-700">ชื่อ-นามสกุล ผู้รับสินค้า *</label>
+          <input type="text" id="cust-name" required placeholder="เช่น สมชาย ใจดี" class="w-full p-3.5 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 outline-none transition">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5 text-stone-700">เบอร์โทรศัพท์มือถือ (สำหรับขนส่งติดต่อ) *</label>
+          <input type="tel" id="cust-phone" required placeholder="เช่น 0812345678" class="w-full p-3.5 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 outline-none transition">
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5 text-stone-700">ที่อยู่จัดส่งครบถ้วน (บ้านเลขที่ หมู่ ซอย ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์) *</label>
+          <textarea id="cust-address" required rows="3" placeholder="กรอกที่อยู่ให้ครบถ้วนเพื่อความรวดเร็วในการจัดส่ง" class="w-full p-3.5 border border-stone-300 rounded-xl focus:ring-2 focus:ring-emerald-600 focus:border-emerald-600 outline-none transition"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1.5 text-stone-700">เลือกช่องทางชำระเงิน</label>
+          <select id="payment-method" class="w-full p-3.5 border border-stone-300 rounded-xl bg-white focus:ring-2 focus:ring-emerald-600 outline-none">
+            <option value="เก็บเงินปลายทาง (COD)">💵 เก็บเงินปลายทาง (COD) - จ่ายเมื่อรับของ</option>
+            <option value="โอนชำระผ่านธนาคาร">🏦 โอนชำระผ่านธนาคาร / พร้อมเพย์</option>
+          </select>
+        </div>
+
+        <button type="submit" id="submit-btn" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-4 rounded-xl text-lg shadow-lg transition transform active:scale-99 mt-2">
+          ยืนยันการสั่งซื้อสินค้า
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Success Modal -->
+  <div id="success-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+        ✅
+      </div>
+      <h3 class="text-2xl font-bold text-stone-900 mb-2">สั่งซื้อสำเร็จเรียบร้อย!</h3>
+      <p class="text-stone-600 text-sm mb-4">ขอบคุณที่ไว้วางใจ BOTANICA HAIR ข้อมูลคำสั่งซื้อของคุณถูกบันทึกเข้าระบบแล้ว</p>
+      <div class="bg-stone-100 p-4 rounded-xl mb-6">
+        <div class="text-xs text-stone-500">หมายเลขคำสั่งซื้อ (Order ID)</div>
+        <div id="modal-order-id" class="text-xl font-bold text-emerald-800 mt-1">ORD-000000</div>
+      </div>
+      <button onclick="closeModal()" class="w-full bg-emerald-700 hover:bg-emerald-800 text-white font-bold py-3 rounded-xl transition">
+        ตกลง
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-stone-900 text-stone-400 py-8 px-4 text-center text-xs">
+    <p class="font-semibold text-stone-300 text-sm mb-1">BOTANICA HAIR OFFICIAL</p>
+    <p>© 2026 Botanica Hair Care. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // วาง Web App URL ที่ได้จาก Google Apps Script ด้านล่างนี้ (แทนที่คำว่า YOUR_GOOGLE_SCRIPT_URL_HERE)
+    // =========================================================================
+    const DEFAULT_SCRIPT_URL = 'YOUR_GOOGLE_SCRIPT_URL_HERE';
+
+    function getScriptUrl() {
+      if (DEFAULT_SCRIPT_URL !== 'YOUR_GOOGLE_SCRIPT_URL_HERE' && DEFAULT_SCRIPT_URL.trim() !== '') {
+        return DEFAULT_SCRIPT_URL.trim();
+      }
+      return localStorage.getItem('SHAMPOO_SCRIPT_URL') || '';
+    }
+
+    // แสดงแถบแจ้งเตือนหากยังไม่ได้ตั้งค่า URL
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!getScriptUrl()) {
+        document.getElementById('setup-banner').classList.remove('hidden');
+      }
+    });
+
+    function saveQuickUrl() {
+      const val = document.getElementById('quick-url-input').value.trim();
+      if (!val.startsWith('https://script.google.com/')) {
+        alert('กรุณากรอก URL ที่ขึ้นต้นด้วย https://script.google.com/ ให้ถูกต้อง');
+        return;
+      }
+      localStorage.setItem('SHAMPOO_SCRIPT_URL', val);
+      document.getElementById('setup-banner').classList.add('hidden');
+      alert('บันทึก Web App URL เรียบร้อยแล้ว! พร้อมทดลองสั่งซื้อได้ทันที');
+    }
+
+    // ระบบคำนวณจำนวนสินค้าและราคา
+    let qty = { sku1: 1, sku2: 0 };
+    const prices = { sku1: 290, sku2: 350 };
+
+    function updateQty(sku, change) {
+      if (qty[sku] + change >= 0) {
+        qty[sku] += change;
+        renderSummary();
+      }
+    }
+
+    function renderSummary() {
+      document.getElementById('sku1-display').innerText = qty.sku1;
+      document.getElementById('sku2-display').innerText = qty.sku2;
+
+      const sub1 = qty.sku1 * prices.sku1;
+      const sub2 = qty.sku2 * prices.sku2;
+      const total = sub1 + sub2;
+
+      document.getElementById('summary-sku1').innerText = `${qty.sku1} ขวด (฿${sub1.toLocaleString()})`;
+      document.getElementById('summary-sku2').innerText = `${qty.sku2} ขวด (฿${sub2.toLocaleString()})`;
+      document.getElementById('total-price').innerText = `฿${total.toLocaleString()}`;
+    }
+
+    function closeModal() {
+      document.getElementById('success-modal').classList.add('hidden');
+    }
+
+    // ส่งข้อมูลไปยัง Google Sheets
+    document.getElementById('order-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const scriptUrl = getScriptUrl();
+      if (!scriptUrl) {
+        alert('กรุณาตั้งค่า Google Apps Script Web App URL ในแถบสีเหลืองด้านบนก่อนทำการสั่งซื้อ');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      if (qty.sku1 === 0 && qty.sku2 === 0) {
+        alert('กรุณาเลือกสินค้าอย่างน้อย 1 ขวด');
+        return;
+      }
+
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerText = 'กำลังบันทึกคำสั่งซื้อ...';
+
+      const payload = {
+        name: document.getElementById('cust-name').value.trim(),
+        phone: document.getElementById('cust-phone').value.trim(),
+        address: document.getElementById('cust-address').value.trim(),
+        sku1Qty: qty.sku1,
+        sku2Qty: qty.sku2,
+        totalPrice: (qty.sku1 * prices.sku1) + (qty.sku2 * prices.sku2),
+        paymentMethod: document.getElementById('payment-method').value
+      };
+
+      try {
+        const res = await fetch(scriptUrl, {
+          method: 'POST',
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+
+        if (result.status === 'success') {
+          document.getElementById('modal-order-id').innerText = result.orderId;
+          document.getElementById('success-modal').classList.remove('hidden');
+          document.getElementById('order-form').reset();
+          qty = { sku1: 1, sku2: 0 };
+          renderSummary();
+        } else {
+          alert('เกิดข้อผิดพลาดจากเซิร์ฟเวอร์: ' + result.message);
+        }
+      } catch (error) {
+        alert('ไม่สามารถเชื่อมต่อ Google Sheets ได้ กรุณาตรวจสอบว่าตั้งค่า Deploy เป็น "Anyone (ทุกคน)" แล้ว');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'ยืนยันการสั่งซื้อสินค้า';
+      }
+    });
+  </script>
+</body>
+</html>
